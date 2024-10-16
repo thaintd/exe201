@@ -1,0 +1,18 @@
+.custom-container {
+  padding: 0 16px;
+
+  @media (max-width: 600px) {
+    padding: 0 8px;
+  }
+
+  @media (min-width: 600px) and (max-width: 900px) {
+    padding: 0 16px;
+  }
+
+  @media (min-width: 900px) {
+    padding: 0 124px;
+  }
+  .container-content {
+    padding: 0;
+  }
+}

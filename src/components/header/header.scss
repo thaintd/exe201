@@ -1,0 +1,27 @@
+.custom_header {
+  padding: 0 16px;
+  height: 90px;
+  background-color: #db6f16;
+
+  @media (max-width: 600px) {
+    padding: 0 8px;
+  }
+
+  @media (min-width: 600px) and (max-width: 900px) {
+    padding: 0 16px;
+  }
+
+  @media (min-width: 900px) {
+    padding: 15px 124px;
+  }
+  .MuiToolbar-root {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .custom_button {
+    background-color: #fff;
+    color: #db6f16;
+    border-radius: 15px;
+  }
+}
