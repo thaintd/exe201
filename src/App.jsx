@@ -11,6 +11,7 @@ import Owner from "./pages/Owner";
 import ProfileUpdateForm from "./pages/Profile";
 import SubscriptionPage from "./pages/SubscriptionPage";
 import Intro from "./pages/Intro";
+import RoomList from "./pages/RoomList";
 import { Box, Container } from "@mui/material";
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
             <Route path="/profile" element={<ProfileUpdateForm />} />
             <Route path="/subscription" element={<SubscriptionPage />} />
             <Route path="/" element={<Intro />} />
+            <Route path="/rooms/:roomType" element={<RoomList />} />
           </Routes>
         </Container>
       )}

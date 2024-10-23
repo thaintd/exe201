@@ -20,15 +20,16 @@ function RoomManagement() {
     rentAmount: 0,
     waterAmount: 0,
     electricAmount: 0,
-    serviceAmount: 0
+    serviceAmount: 0,
+    restRoom: 0,
+    bebRoom: 0
   });
   const [formData, setFormData] = useState({
     province: "",
     distinct: "",
     ward: "",
     street: "",
-    number: "",
-    category: [0]
+    number: ""
   });
 
   // Modal state
@@ -227,7 +228,7 @@ function RoomManagement() {
   const handleRoomEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axiosInstance.put(`/api/Room/UpdateRoom/${roomFormData.roomId}`, roomFormData);
+      await axiosInstance.put(`/api/Room/Edit/${roomFormData.roomId}`, roomFormData);
       // Refresh room list after update
       await fetchRoomsForPlace(addresses[selectedAddress].placeId);
       setOpenEditModal(false);
@@ -273,6 +274,7 @@ function RoomManagement() {
                     </Typography>
                     <Typography variant="body2">Giá thuê: {room.rentAmount} VND</Typography>
                     <Typography variant="body2">Tình trạng: {room.isRented ? "Đã thuê" : "Chưa thuê"}</Typography>
+                    <Typography variant="body2">Loại hình: {room.type} </Typography>
                   </CardContent>
                   <CardActions>
                     <Button size="small" color="primary" onClick={() => handleRoomDetailOpen(room)}>
@@ -314,19 +316,31 @@ function RoomManagement() {
 
       {/* Edit Room Modal */}
       <Dialog open={openEditModal} onClose={() => setOpenEditModal(false)}>
-        <DialogTitle>Chỉnh sửa phòng</DialogTitle>
-        <DialogContent>
-          <TextField label="Tên phòng" name="roomName" value={roomFormData.roomName || ""} onChange={handleRoomChange} fullWidth margin="normal" />
-          <TextField label="Giá thuê" name="rentAmount" type="number" value={roomFormData.rentAmount || ""} onChange={handleRoomChange} fullWidth margin="normal" />
-          <TextField label="Diện tích" name="area" type="number" value={roomFormData.area || ""} onChange={handleRoomChange} fullWidth margin="normal" />
-          {/* Include other fields as necessary... */}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenEditModal(false)}>Hủy</Button>
-          <Button onClick={handleRoomEditSubmit} color="primary">
-            Cập nhật
-          </Button>
-        </DialogActions>
+        <Dialog open={openEditModal} onClose={() => setOpenEditModal(false)}>
+          <DialogTitle>Chỉnh sửa phòng</DialogTitle>
+          <DialogContent>
+            <TextField margin="dense" name="roomName" label="Tên phòng" fullWidth variant="outlined" value={roomFormData.roomName} onChange={handleRoomChange} />
+            <TextField margin="dense" name="rentAmount" label="Giá thuê (VND)" fullWidth variant="outlined" type="number" value={roomFormData.rentAmount} onChange={handleRoomChange} />
+            <TextField margin="dense" name="area" label="Diện tích (m2)" fullWidth variant="outlined" type="number" value={roomFormData.area} onChange={handleRoomChange} />
+            <TextField margin="dense" name="direction" label="Hướng" fullWidth variant="outlined" value={roomFormData.direction} onChange={handleRoomChange} />
+            <TextField margin="dense" name="interiorStatus" label="Tình trạng nội thất" fullWidth variant="outlined" value={roomFormData.interiorStatus} onChange={handleRoomChange} />
+            <TextField select label="Loại phòng" name="type" value={roomFormData.type} onChange={handleRoomChange} fullWidth margin="normal">
+              <MenuItem value={1}>Nhà trọ</MenuItem>
+              <MenuItem value={2}>Chung cư</MenuItem>
+              <MenuItem value={3}>Nhà nguyên căn</MenuItem>
+            </TextField>
+            <Checkbox name="isRented" checked={roomFormData.isRented} onChange={(e) => setRoomFormData((prevState) => ({ ...prevState, isRented: e.target.checked }))} />
+            <label>Đã thuê</label>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpenEditModal(false)} color="secondary">
+              Hủy
+            </Button>
+            <Button onClick={handleRoomEditSubmit} color="primary">
+              Lưu thay đổi
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Dialog>
 
       {/* Add Address Modal */}
@@ -374,7 +388,6 @@ function RoomManagement() {
         <DialogContent>
           <TextField label="Tên phòng" name="roomName" value={roomFormData.roomName} onChange={handleRoomChange} fullWidth margin="normal" />
 
-          {/* Direction Select */}
           <TextField select label="Hướng phòng" name="direction" value={roomFormData.direction} onChange={handleRoomChange} fullWidth margin="normal">
             <MenuItem value={1}>Bắc</MenuItem>
             <MenuItem value={2}>Đông Bắc</MenuItem>
@@ -407,7 +420,8 @@ function RoomManagement() {
           <TextField label="Tiền nước" name="waterAmount" type="number" value={roomFormData.waterAmount} onChange={handleRoomChange} fullWidth margin="normal" />
           <TextField label="Tiền điện" name="electricAmount" type="number" value={roomFormData.electricAmount} onChange={handleRoomChange} fullWidth margin="normal" />
           <TextField label="Tiền dịch vụ" name="serviceAmount" type="number" value={roomFormData.serviceAmount} onChange={handleRoomChange} fullWidth margin="normal" />
-
+          <TextField margin="dense" label="Số phòng ngủ" name="bedRoom" type="number" value={roomFormData.bedRoom} onChange={handleRoomChange} fullWidth />
+          <TextField margin="dense" label="Số phòng vệ sinh" name="restRoom" type="number" value={roomFormData.restRoom} onChange={handleRoomChange} fullWidth />
           {/* Is Rented Checkbox */}
           <Grid container alignItems="center">
             <Grid item>

@@ -23,7 +23,9 @@ const RentalForm = () => {
     serviceAmount: 0,
     note: "",
     title: "",
-    categories: [0],
+    type: 0,
+    restRoom: 0,
+    bedRoom: 0,
     status: 0,
     imageUrls: []
   });
@@ -190,7 +192,31 @@ const RentalForm = () => {
         </Grid>
 
         <Grid item xs={6}>
-          <TextField fullWidth name="direction" label="Hướng phòng" type="number" value={formData.direction} onChange={handleChange} required />
+          <TextField select label="Hướng phòng" name="direction" value={formData.direction} onChange={handleChange} fullWidth margin="normal">
+            <MenuItem value={1}>Bắc</MenuItem>
+            <MenuItem value={2}>Đông Bắc</MenuItem>
+            <MenuItem value={3}>Đông</MenuItem>
+            <MenuItem value={4}>Đông Nam</MenuItem>
+            <MenuItem value={5}>Nam</MenuItem>
+            <MenuItem value={6}>Tây Nam</MenuItem>
+            <MenuItem value={7}>Tây</MenuItem>
+            <MenuItem value={8}>Tây Bắc</MenuItem>
+          </TextField>
+        </Grid>
+        <Grid item xs={6}>
+          <TextField select label="Tình trạng nội thất" name="interiorStatus" value={formData.interiorStatus} onChange={handleChange} fullWidth margin="normal">
+            <MenuItem value={1}>Trống</MenuItem>
+            <MenuItem value={2}>Cơ bản</MenuItem>
+            <MenuItem value={3}>Đầy đủ</MenuItem>
+            <MenuItem value={4}>Nội thất Cao cấp</MenuItem>
+          </TextField>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField select label="Loại phòng" name="type" value={formData.type} onChange={handleChange} fullWidth margin="normal">
+            <MenuItem value={1}>Nhà trọ</MenuItem>
+            <MenuItem value={2}>Chung cư</MenuItem>
+            <MenuItem value={3}>Nhà nguyên căn</MenuItem>
+          </TextField>
         </Grid>
 
         <Grid item xs={12}>
@@ -215,7 +241,7 @@ const RentalForm = () => {
 
         {/* Notes */}
         <Grid item xs={12}>
-          <TextField fullWidth name="note" label="Ghi chú" multiline rows={4} value={formData.note} onChange={handleChange} />
+          <TextField fullWidth name="note" label="Mô tả" multiline rows={4} value={formData.note} onChange={handleChange} />
         </Grid>
 
         {/* Image Upload */}

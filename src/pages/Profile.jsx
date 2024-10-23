@@ -10,7 +10,7 @@ const ProfileUpdateForm = () => {
     password: "",
     imageUrl: "",
     name: "",
-    phone: "",
+    phone: 0,
     citizenId: "",
     birthDay: ""
   });

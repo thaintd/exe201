@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Grid, Card, CardContent, Typography, Button, CardActions, Snackbar, Avatar, Box } from "@mui/material";
-import { Star, CheckCircle, SupportAgent, Adb } from "@mui/icons-material";
-import axios from "axios";
-
+import { Star, CheckCircle, SupportAgent } from "@mui/icons-material";
+import axiosInstance from "../services/axiosInstance";
 const packages = [
   {
     name: "Thường",
-    price: "100,000 VND",
+    price: "20,000 VND",
     duration: "1 tháng",
     benefits: [
       { text: "Truy cập cơ bản", icon: <CheckCircle /> },
@@ -16,45 +15,49 @@ const packages = [
   {
     name: "VIP",
     price: "300,000 VND",
-    duration: "1 tháng",
+    duration: "3 tháng",
     benefits: [
       { text: "Truy cập nâng cao", icon: <Star /> },
-      { text: "Hỗ trợ 24/7", icon: <SupportAgent /> },
-      { text: "Không quảng cáo", icon: <Adb /> }
+      { text: "Hỗ trợ 24/7", icon: <SupportAgent /> }
     ]
   },
   {
     name: "Premium",
-    price: "500,000 VND",
-    duration: "1 tháng",
+    price: "600,000 VND",
+    duration: "1 năm",
     benefits: [
       { text: "Truy cập đầy đủ", icon: <Star /> },
       { text: "Hỗ trợ 24/7", icon: <SupportAgent /> },
-      { text: "Không quảng cáo", icon: <Adb /> },
       { text: "Tính năng đặc biệt", icon: <CheckCircle /> }
     ]
   }
 ];
 
 const SubscriptionPage = () => {
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [message, setMessage] = useState("");
 
-  const handlePurchase = async (packageName) => {
+  const handleBuyPackage = async (pkg) => {
     try {
-      const response = await axios.post("/api/purchase", { packageName });
-      console.log("Thanh toán thành công:", response.data);
-      setSnackbarMessage(`Bạn đã mua gói ${packageName} thành công!`);
-      setSnackbarOpen(true);
-    } catch (error) {
-      console.error("Lỗi khi thanh toán:", error);
-      setSnackbarMessage(`Thanh toán gói ${packageName} thất bại.`);
-      setSnackbarOpen(true);
-    }
-  };
+      const subscriptionResponse = await axiosInstance.post("/api/Subscription/Create", {
+        price: pkg.price.replace(" VND", "").replace(",", ""),
+        subscriptionName: pkg.name,
+        description: `Gói ${pkg.name} - ${pkg.duration}`,
+        duration: pkg.duration.includes("tháng") ? parseInt(pkg.duration) : 12
+      });
+      console.log("Subscription response:", subscriptionResponse.data);
 
-  const handleCloseSnackbar = () => {
-    setSnackbarOpen(false);
+      if (subscriptionResponse.data.status === 1) {
+        const orderResponse = await axiosInstance.post("api/Order/Create", { number: 2 });
+        if (orderResponse.data.status === 2) {
+          window.location.href = orderResponse.data.data;
+        }
+      }
+    } catch (error) {
+      console.log("Error buying package:", error);
+      setMessage("Có lỗi xảy ra, vui lòng thử lại!");
+      setOpenSnackbar(true);
+    }
   };
 
   return (
@@ -71,7 +74,7 @@ const SubscriptionPage = () => {
             <Card
               sx={{
                 p: 2,
-                height: "100%", // Đảm bảo các thẻ có cùng chiều cao
+                height: "100%",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
@@ -112,14 +115,14 @@ const SubscriptionPage = () => {
                 </ul>
               </CardContent>
               <CardActions sx={{ justifyContent: "center", mt: 2 }}>
-                <Button variant="contained" color="primary" size="large" sx={{ borderRadius: "25px", px: 4 }} onClick={() => handlePurchase(pkg.name)}>
+                <Button variant="contained" color="primary" size="large" sx={{ borderRadius: "25px", px: 4 }} onClick={() => handleBuyPackage(pkg)}>
                   Mua {pkg.name}
                 </Button>
               </CardActions>
             </Card>
           </Grid>
         ))}
-        <Snackbar open={snackbarOpen} onClose={handleCloseSnackbar} message={snackbarMessage} autoHideDuration={3000} />
+        <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={() => setOpenSnackbar(false)} message={message} />
       </Grid>
     </Box>
   );

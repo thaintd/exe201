@@ -5,6 +5,7 @@ import { getUserId } from "../services/auth";
 import { useNavigate } from "react-router-dom";
 import ImageUpload from "../components/ImageUpload";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import formatCurrency from "../services/format";
 function PostsManagement() {
   const [posts, setPosts] = useState([]);
   const [rooms, setRooms] = useState([]); // State for available rooms
@@ -87,8 +88,8 @@ function PostsManagement() {
     }
   };
 
-  const handleViewDetails = (postId) => {
-    navigate(`/posts/${postId}`);
+  const handleViewDetails = (post) => {
+    navigate(`/product-detail/${post.postId}`);
   };
 
   const handleAddPost = async () => {
@@ -169,7 +170,7 @@ function PostsManagement() {
                     Tên phòng: {post?.room?.roomName}
                   </Typography>
                   <Typography variant="h5" sx={{ color: "#2ecc71", fontWeight: "bold" }}>
-                    {post.room?.rentAmount} đồng
+                    {formatCurrency(post.room?.rentAmount)}
                   </Typography>
                 </CardContent>
 
@@ -178,9 +179,9 @@ function PostsManagement() {
                   <MoreVertIcon />
                 </IconButton>
                 <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-                  <MenuItem onClick={handleEdit}>Chỉnh sửa</MenuItem>
+                  <MenuItem>Chỉnh sửa</MenuItem>
                   <MenuItem onClick={handleDelete}>Xóa</MenuItem>
-                  <MenuItem onClick={handleViewDetails}>Xem chi tiết</MenuItem>
+                  <MenuItem onClick={() => navigate(`/product-detail/${post.postId}`)}>Xem chi tiết</MenuItem>
                 </Menu>
               </Card>
             </Grid>

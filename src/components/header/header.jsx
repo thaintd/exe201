@@ -32,7 +32,7 @@ export default function Header() {
   useEffect(() => {
     if (token && userId) {
       getUserProfile({ userId }).then((res) => {
-        console.log("User profile:", res.result.data);
+        console.log("User profile:", res);
         setName(res.result.data.name);
       });
     }
