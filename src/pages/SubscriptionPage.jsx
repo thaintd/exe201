@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Grid, Card, CardContent, Typography, Button, CardActions, Snackbar, Avatar, Box } from "@mui/material";
 import { Star, CheckCircle, SupportAgent } from "@mui/icons-material";
 import axiosInstance from "../services/axiosInstance";
+
 const packages = [
   {
     name: "Thường",
-    price: "20,000 VND",
+    price: "100,000 VND",
     duration: "1 tháng",
     benefits: [
       { text: "Truy cập cơ bản", icon: <CheckCircle /> },
@@ -37,24 +38,15 @@ const SubscriptionPage = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleBuyPackage = async (pkg) => {
+  const handleBuySinglePost = async () => {
     try {
-      const subscriptionResponse = await axiosInstance.post("/api/Subscription/Create", {
-        price: pkg.price.replace(" VND", "").replace(",", ""),
-        subscriptionName: pkg.name,
-        description: `Gói ${pkg.name} - ${pkg.duration}`,
-        duration: pkg.duration.includes("tháng") ? parseInt(pkg.duration) : 12
-      });
-      console.log("Subscription response:", subscriptionResponse.data);
-
-      if (subscriptionResponse.data.status === 1) {
-        const orderResponse = await axiosInstance.post("api/Order/Create", { number: 2 });
-        if (orderResponse.data.status === 2) {
-          window.location.href = orderResponse.data.data;
-        }
+      const response = await axiosInstance.post("/api/Order/Posting");
+      console.log(response.data);
+      if (response.data.status === 1) {
+        window.location.href = response.data.data;
       }
     } catch (error) {
-      console.log("Error buying package:", error);
+      console.log("Error purchasing single post:", error);
       setMessage("Có lỗi xảy ra, vui lòng thử lại!");
       setOpenSnackbar(true);
     }
@@ -81,9 +73,7 @@ const SubscriptionPage = () => {
                 borderRadius: "15px",
                 boxShadow: 3,
                 transition: "transform 0.3s",
-                "&:hover": {
-                  transform: "scale(1.05)"
-                }
+                "&:hover": { transform: "scale(1.05)" }
               }}
             >
               <CardContent>
@@ -115,13 +105,18 @@ const SubscriptionPage = () => {
                 </ul>
               </CardContent>
               <CardActions sx={{ justifyContent: "center", mt: 2 }}>
-                <Button variant="contained" color="primary" size="large" sx={{ borderRadius: "25px", px: 4 }} onClick={() => handleBuyPackage(pkg)}>
+                <Button variant="contained" color="primary" size="large" sx={{ borderRadius: "25px", px: 4 }}>
                   Mua {pkg.name}
                 </Button>
               </CardActions>
             </Card>
           </Grid>
         ))}
+        <Grid item xs={12}>
+          <Button variant="contained" color="secondary" size="large" sx={{ mt: 3, px: 4 }} onClick={handleBuySinglePost}>
+            Mua 1 bài đăng - 20,000 VND
+          </Button>
+        </Grid>
         <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={() => setOpenSnackbar(false)} message={message} />
       </Grid>
     </Box>

@@ -12,6 +12,7 @@ import ProfileUpdateForm from "./pages/Profile";
 import SubscriptionPage from "./pages/SubscriptionPage";
 import Intro from "./pages/Intro";
 import RoomList from "./pages/RoomList";
+import PaymentResultPage from "./pages/PaymentResultPage";
 import { Box, Container } from "@mui/material";
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
             <Route path="/subscription" element={<SubscriptionPage />} />
             <Route path="/" element={<Intro />} />
             <Route path="/rooms/:roomType" element={<RoomList />} />
+            <Route path="/payment" element={<PaymentResultPage />} />
           </Routes>
         </Container>
       )}

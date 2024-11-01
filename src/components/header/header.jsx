@@ -13,6 +13,7 @@ export default function Header() {
   const userId = getUserId();
 
   const [name, setName] = useState("");
+  const [hasSubscription, setHasSubscription] = useState(false); // Trạng thái kiểm tra subscription
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenuOpen = (event) => {
@@ -34,9 +35,24 @@ export default function Header() {
       getUserProfile({ userId }).then((res) => {
         console.log("User profile:", res);
         setName(res.result.data.name);
+        // Kiểm tra nếu người dùng có subscription
+        const orders = res.result.data.orders.$values;
+        console.log("Orders:", orders);
+        const hasActiveSubscription = orders.some((order) => order.subscriptionId != null); // Chỉ cần có subscriptionId là đủ
+        console.log("Has subscription:", hasActiveSubscription);
+        setHasSubscription(hasActiveSubscription);
       });
     }
   }, [token, userId]);
+
+  // Hàm xử lý nhấn nút đăng tin và quản lý
+  const handleNavigation = (path) => {
+    if (!hasSubscription) {
+      navigate("/subscription"); // Chuyển về trang dịch vụ nếu không có subscription
+    } else {
+      navigate(path); // Chuyển đến trang mong muốn nếu có subscription
+    }
+  };
 
   return (
     <AppBar position="static" className="custom_header">
@@ -56,7 +72,7 @@ export default function Header() {
                   </Button>
                 </Grid>
                 <Grid item>
-                  <Button onClick={() => navigate("/owner")} color="inherit">
+                  <Button color="inherit" onClick={() => handleNavigation("/owner")}>
                     Quản lý
                   </Button>
                 </Grid>
@@ -128,7 +144,7 @@ export default function Header() {
               </>
             )}
             <Grid item>
-              <Button color="inherit" className="custom_button" onClick={() => navigate("/post")} sx={{ textTransform: "none" }}>
+              <Button color="inherit" className="custom_button" onClick={() => handleNavigation("/post")} sx={{ textTransform: "none" }}>
                 Đăng tin
               </Button>
             </Grid>
