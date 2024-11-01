@@ -14,13 +14,6 @@ const PaymentResultPage = () => {
   const cancel = queryParams.get("cancel") === "true";
   const orderCode = queryParams.get("orderCode");
 
-  // Handle redirection if payment was canceled
-  useEffect(() => {
-    if (cancel) {
-      navigate("/subscription");
-    }
-  }, [cancel, navigate]);
-
   return (
     <Box
       sx={{
