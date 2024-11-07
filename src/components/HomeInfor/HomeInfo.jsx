@@ -66,7 +66,7 @@ export const HomeCardCarousel = ({ filteredPosts, roomType }) => {
       </Slider>
       <IconButton
         onClick={() => navigate(`/rooms/${roomType}`)} // Change this to your detailed view route
-        sx={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)" }}
+        sx={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)", backgroundColor: "white", boxShadow: 3 }}
       >
         <ArrowForwardIcon />
       </IconButton>
