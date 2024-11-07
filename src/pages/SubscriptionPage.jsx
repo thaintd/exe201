@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Grid, Card, CardContent, Typography, Button, CardActions, Snackbar, Avatar, Box } from "@mui/material";
+import { Grid, Card, CardContent, Typography, Button, CardActions, Snackbar, Avatar, Box, CircularProgress } from "@mui/material";
 import { Star, CheckCircle, SupportAgent } from "@mui/icons-material";
 import axiosInstance from "../services/axiosInstance";
 
@@ -37,8 +37,10 @@ const packages = [
 const SubscriptionPage = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleBuySinglePost = async () => {
+    setLoading(true);
     try {
       const response = await axiosInstance.post("/api/Order/Posting");
       console.log(response.data);
@@ -49,6 +51,8 @@ const SubscriptionPage = () => {
       console.log("Error purchasing single post:", error);
       setMessage("Có lỗi xảy ra, vui lòng thử lại!");
       setOpenSnackbar(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -113,8 +117,8 @@ const SubscriptionPage = () => {
           </Grid>
         ))}
         <Grid item xs={12}>
-          <Button variant="contained" color="secondary" size="large" sx={{ mt: 3, px: 4 }} onClick={handleBuySinglePost}>
-            Mua 1 bài đăng - 20,000 VND
+          <Button variant="contained" color="secondary" size="large" sx={{ mt: 3, px: 4 }} onClick={handleBuySinglePost} disabled={loading}>
+            {loading ? <CircularProgress size={24} color="inherit" /> : "Mua 1 bài đăng - 20,000 VND"}
           </Button>
         </Grid>
         <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={() => setOpenSnackbar(false)} message={message} />
