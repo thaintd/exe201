@@ -67,8 +67,8 @@ export default function Header() {
                   </Button>
                 </Grid>
                 <Grid item>
-                  <Button color="inherit" onClick={() => navigate("/")}>
-                    Giới thiệu
+                  <Button color="inherit" onClick={() => navigate("/blog")}>
+                    Blog
                   </Button>
                 </Grid>
                 <Grid item>
