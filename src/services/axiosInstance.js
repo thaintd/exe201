@@ -5,7 +5,10 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
     "Content-Encoding": "gzip",
-    Authorization: `Bearer ${localStorage.getItem("token")}`
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    "Cache-Control": "no-cache, no-store, must-revalidate",
+    Pragma: "no-cache",
+    Expires: "0"
   }
 });
 
