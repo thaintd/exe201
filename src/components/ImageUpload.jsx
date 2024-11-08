@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CloudinaryContext, Image } from "cloudinary-react";
 import axios from "axios";
-import { Grid, Box, Typography } from "@mui/material";
+import { Grid, Box, Typography, Button, CircularProgress } from "@mui/material";
 
 // eslint-disable-next-line react/prop-types
 const ImageUpload = ({ onUpload }) => {
@@ -44,29 +44,44 @@ const ImageUpload = ({ onUpload }) => {
 
   return (
     <CloudinaryContext cloudName="dgkth0wxx">
-      <div>
-        <input type="file" multiple onChange={handleFileChange} />
+      <Box>
+        <Button
+          variant="contained"
+          component="label"
+          color="primary"
+          sx={{
+            padding: "8px 16px",
+            borderRadius: "8px",
+            marginBottom: "1rem",
+            boxShadow: "0 3px 5px rgba(0, 0, 0, 0.2)"
+          }}
+        >
+          Upload Images
+          <input type="file" multiple hidden onChange={handleFileChange} />
+        </Button>
+
         {loading ? (
-          <p>Loading...</p>
+          <Box display="flex" alignItems="center" mt={2}>
+            <CircularProgress size={24} color="primary" />
+            <Typography ml={2}>Uploading...</Typography>
+          </Box>
         ) : (
           <Box mt={2}>
-            <Typography variant="h6">Uploaded Images:</Typography>
+            {images.length > 0 && (
+              <Typography variant="h6" mb={1}>
+                Uploaded Images:
+              </Typography>
+            )}
             <Grid container spacing={2}>
               {images.map((image, index) => (
                 <Grid item xs={4} key={index}>
-                  <Image
-                    publicId={image}
-                    width="150" // Đặt chiều rộng nhỏ hơn
-                    height="100" // Đặt chiều cao (tuỳ chọn)
-                    crop="scale"
-                    style={{ borderRadius: "8px", objectFit: "cover" }} // Để cải thiện giao diện
-                  />
+                  <Image publicId={image} width="150" height="100" crop="scale" style={{ borderRadius: "8px", objectFit: "cover" }} />
                 </Grid>
               ))}
             </Grid>
           </Box>
         )}
-      </div>
+      </Box>
     </CloudinaryContext>
   );
 };

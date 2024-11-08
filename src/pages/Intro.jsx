@@ -205,10 +205,10 @@ const Intro = () => {
           Nếu bạn có bất kỳ câu hỏi nào, hãy liên hệ với chúng tôi qua:
         </Typography>
         <Typography variant="body1" textAlign="center" sx={{ mb: 2 }}>
-          Email: support@example.com
+          Email: homee@gmail.com
         </Typography>
         <Typography variant="body1" textAlign="center">
-          Điện thoại: (123) 456-7890
+          Điện thoại: 037 306 1719
         </Typography>
       </Box>
     </Box>
