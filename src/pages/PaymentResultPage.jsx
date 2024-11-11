@@ -13,6 +13,24 @@ const PaymentResultPage = () => {
   const status = queryParams.get("status");
   const cancel = queryParams.get("cancel") === "true";
   const orderCode = queryParams.get("orderCode");
+  const id = queryParams.get("id")
+
+  useEffect(() => {
+    const verify = async () => {
+      try {
+        const response = await axiosInstance.get(`/api/Order/return-url/?code=${code}&id=${id}&cancel=${cancel}&status=${status}&orderCode=${orderCode}`);
+        if (response.status === 200) {
+          toast.success("Xác nhận thanh toán thành công! Bạn có thể đăng bài ngay.");
+        }
+      } catch (error) {
+        toast.error("Thanh toán thất bại. Vui lòng kiểm tra lại.");
+      }
+    };
+
+    if (token) {
+      verify();
+    }
+  }, []);
 
   return (
     <Box
